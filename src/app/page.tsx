@@ -29,12 +29,7 @@ export default function Home() {
     try {
       const { data, error } = await supabase
         .from('threads')
-        .select(`
-          *,
-          user_profiles (
-            anonymous_name
-          )
-        `)
+        .select('*, user_profiles!inner(anonymous_name)')
         .is('parent_id', null)
         .order('created_at', { ascending: false })
 
