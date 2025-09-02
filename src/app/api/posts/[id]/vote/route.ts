@@ -3,10 +3,11 @@ import { createClient } from '@/lib/supabase-server'
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { type } = await request.json()
+    const { id } = await params
 
     if (type !== 'like') {
       return NextResponse.json(
@@ -20,7 +21,7 @@ export async function PATCH(
     const { data: thread, error: fetchError } = await supabase
       .from('threads')
       .select('likes')
-      .eq('id', params.id)
+      .eq('id', id)
       .single()
 
     if (fetchError) throw fetchError
@@ -30,7 +31,7 @@ export async function PATCH(
     const { data, error } = await supabase
       .from('threads')
       .update(updates)
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
 
     if (error) throw error
