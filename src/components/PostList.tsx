@@ -85,7 +85,12 @@ export default function PostList({ posts, loading }: PostListProps) {
           <div className="flex items-center gap-3 text-sm mb-4">
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium">
               <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-              {post.user_profiles?.anonymous_name || '익명'}
+              {post.visibility_type === 'nickname' && post.user_profiles?.nickname
+                ? post.user_profiles.nickname 
+                : post.user_profiles?.anonymous_name || '익명'}
+              {post.visibility_type === 'anonymous' && (
+                <span className="text-xs opacity-75 ml-1">🎭</span>
+              )}
             </div>
             <span className="text-gray-500 dark:text-gray-400">•</span>
             <span className="text-gray-600 dark:text-gray-300 bg-gray-100/80 dark:bg-gray-700/50 px-2 py-1 rounded-lg text-xs">

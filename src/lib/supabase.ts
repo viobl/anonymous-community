@@ -14,6 +14,7 @@ export type Database = {
           parent_id: string | null
           content: string
           user_id: string
+          visibility_type: string
           depth: number
           path: string[]
           created_at: string
@@ -27,6 +28,7 @@ export type Database = {
           parent_id?: string | null
           content: string
           user_id: string
+          visibility_type?: string
           depth?: number
           path?: string[]
           created_at?: string
@@ -40,6 +42,7 @@ export type Database = {
           parent_id?: string | null
           content?: string
           user_id?: string
+          visibility_type?: string
           depth?: number
           path?: string[]
           created_at?: string
@@ -72,6 +75,7 @@ export type Database = {
 
 export type Thread = Database['public']['Tables']['threads']['Row'] & {
   user_profiles?: {
+    nickname: string
     anonymous_name: string
   }
 }

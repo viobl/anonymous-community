@@ -12,6 +12,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
   const [content, setContent] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
+  const [visibilityType, setVisibilityType] = useState<'anonymous' | 'nickname'>('anonymous')
   
   const { user } = useAuth()
 
@@ -29,13 +30,15 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
           {
             content: content.trim(),
             user_id: user.id,
-            parent_id: null
+            parent_id: null,
+            visibility_type: visibilityType
           }
         ])
 
       if (error) throw error
 
       setContent('')
+      setVisibilityType('anonymous')
       setIsExpanded(false)
       onPostCreated()
     } catch (error) {
@@ -117,6 +120,44 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
             required
           />
         </div>
+
+        <div className="group">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+            공개 설정
+          </label>
+          <div className="flex gap-4">
+            <button
+              type="button"
+              onClick={() => setVisibilityType('anonymous')}
+              className={`flex-1 px-4 py-3 rounded-xl border transition-all duration-200 ${
+                visibilityType === 'anonymous'
+                  ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white border-indigo-500 shadow-lg shadow-indigo-500/25'
+                  : 'bg-white/50 dark:bg-gray-700/50 border-gray-200/50 dark:border-gray-600/50 text-gray-700 dark:text-gray-300 hover:bg-white/70 dark:hover:bg-gray-700/70'
+              }`}
+            >
+              <div className="text-center">
+                <div className="text-lg mb-1">🎭</div>
+                <div className="font-medium">익명</div>
+                <div className="text-xs opacity-75">익명으로 작성</div>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setVisibilityType('nickname')}
+              className={`flex-1 px-4 py-3 rounded-xl border transition-all duration-200 ${
+                visibilityType === 'nickname'
+                  ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white border-indigo-500 shadow-lg shadow-indigo-500/25'
+                  : 'bg-white/50 dark:bg-gray-700/50 border-gray-200/50 dark:border-gray-600/50 text-gray-700 dark:text-gray-300 hover:bg-white/70 dark:hover:bg-gray-700/70'
+              }`}
+            >
+              <div className="text-center">
+                <div className="text-lg mb-1">👤</div>
+                <div className="font-medium">닉네임</div>
+                <div className="text-xs opacity-75">닉네임으로 작성</div>
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="flex gap-4 mt-8 pt-6 border-t border-gray-200/30 dark:border-gray-600/30">
@@ -144,6 +185,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
           onClick={() => {
             setIsExpanded(false)
             setContent('')
+            setVisibilityType('anonymous')
           }}
           className="px-6 py-3 text-gray-600 dark:text-gray-400 border border-gray-300/50 dark:border-gray-600/50 rounded-xl hover:bg-gray-50/50 dark:hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-gray-500/50 transition-all duration-200 backdrop-blur-sm font-medium hover:scale-[1.02] active:scale-[0.98]"
         >

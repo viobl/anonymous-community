@@ -26,16 +26,26 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { content, anonymous_id, parent_id } = await request.json()
+    const { content, parent_id } = await request.json()
 
-    if (!content || !anonymous_id) {
+    if (!content) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Content is required' },
         { status: 400 }
       )
     }
 
     const supabase = await createClient()
+
+    // Get authenticated user
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    
+    if (userError || !user) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      )
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data, error } = await (supabase as any)
@@ -43,7 +53,7 @@ export async function POST(request: Request) {
       .insert([
         {
           content: content.trim(),
-          anonymous_id: anonymous_id,
+          user_id: user.id,
           parent_id: parent_id || null
         }
       ])
