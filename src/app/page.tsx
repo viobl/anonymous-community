@@ -27,14 +27,36 @@ export default function Home() {
     }
 
     try {
-      const { data, error } = await supabase
+      // Fetch threads without join first
+      const { data: threadsData, error: threadsError } = await supabase
         .from('threads')
-        .select('*, user_profiles!inner(anonymous_name)')
+        .select('*')
         .is('parent_id', null)
         .order('created_at', { ascending: false })
 
-      if (error) throw error
-      setThreads(data || [])
+      if (threadsError) throw threadsError
+
+      // Fetch user profiles separately and merge
+      if (threadsData && threadsData.length > 0) {
+        const userIds = threadsData.map(thread => thread.user_id)
+        const { data: profilesData } = await supabase
+          .from('user_profiles')
+          .select('id, anonymous_name')
+          .in('id', userIds)
+
+        // Merge the data
+        const threadsWithProfiles = threadsData.map(thread => {
+          const profile = profilesData?.find(p => p.id === thread.user_id)
+          return {
+            ...thread,
+            user_profiles: profile ? { anonymous_name: profile.anonymous_name } : { anonymous_name: '익명' }
+          }
+        })
+        
+        setThreads(threadsWithProfiles)
+      } else {
+        setThreads([])
+      }
     } catch (error) {
       console.error('Error fetching threads:', error)
     } finally {
