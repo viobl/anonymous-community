@@ -18,6 +18,12 @@ export default function Home() {
   }, [])
 
   const fetchThreads = async () => {
+    // Skip if running on server side or missing env vars
+    if (typeof window === 'undefined' || !process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      setLoading(false)
+      return
+    }
+
     try {
       const { data, error } = await supabase
         .from('threads')
