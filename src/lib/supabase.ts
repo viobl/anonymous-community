@@ -13,7 +13,7 @@ export type Database = {
           id: string
           parent_id: string | null
           content: string
-          anonymous_id: string
+          user_id: string
           depth: number
           path: string[]
           created_at: string
@@ -26,7 +26,7 @@ export type Database = {
           id?: string
           parent_id?: string | null
           content: string
-          anonymous_id: string
+          user_id: string
           depth?: number
           path?: string[]
           created_at?: string
@@ -39,7 +39,7 @@ export type Database = {
           id?: string
           parent_id?: string | null
           content?: string
-          anonymous_id?: string
+          user_id?: string
           depth?: number
           path?: string[]
           created_at?: string
@@ -49,8 +49,29 @@ export type Database = {
           reply_count?: number
         }
       }
+      user_profiles: {
+        Row: {
+          id: string
+          anonymous_name: string
+          created_at: string
+        }
+        Insert: {
+          id: string
+          anonymous_name: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          anonymous_name?: string
+          created_at?: string
+        }
+      }
     }
   }
 }
 
-export type Thread = Database['public']['Tables']['threads']['Row']
+export type Thread = Database['public']['Tables']['threads']['Row'] & {
+  user_profiles?: {
+    anonymous_name: string
+  }
+}
