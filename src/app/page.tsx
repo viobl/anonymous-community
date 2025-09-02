@@ -13,7 +13,7 @@ export default function Home() {
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login')
 
-  const { user, profile, signOut } = useAuth()
+  const { user, signOut } = useAuth()
 
   useEffect(() => {
     fetchThreads()
@@ -27,7 +27,7 @@ export default function Home() {
     }
 
     try {
-      // First try to fetch threads only
+      // Fetch threads only
       const { data: threadsData, error: threadsError } = await supabase
         .from('threads')
         .select('*')
@@ -39,37 +39,7 @@ export default function Home() {
         throw threadsError
       }
 
-      // Then fetch user profiles separately and merge
-      if (threadsData && threadsData.length > 0) {
-        const userIds = threadsData.map(thread => thread.user_id).filter(id => id !== null)
-        
-        let profilesData: { id: string; nickname: string; anonymous_name: string }[] = []
-        if (userIds.length > 0) {
-          const { data, error: profileError } = await supabase
-            .from('user_profiles')
-            .select('id, nickname, anonymous_name')
-            .in('id', userIds)
-          
-          if (profileError) {
-            console.error('Error fetching profiles:', profileError)
-          } else {
-            profilesData = data || []
-          }
-        }
-
-        // Merge the data
-        const threadsWithProfiles = threadsData.map(thread => {
-          const profile = profilesData?.find(p => p.id === thread.user_id)
-          return {
-            ...thread,
-            user_profiles: profile || { nickname: '사용자', anonymous_name: '익명' }
-          }
-        })
-        
-        setThreads(threadsWithProfiles)
-      } else {
-        setThreads([])
-      }
+      setThreads(threadsData || [])
     } catch (error) {
       console.error('Error fetching threads:', error)
     } finally {
@@ -91,18 +61,9 @@ export default function Home() {
               <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
                 익명 커뮤니티
               </h1>
-              {user && profile ? (
-                <p className="text-gray-600 dark:text-gray-300 mt-2 flex items-center gap-2">
-                  <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                  <span className="text-sm font-medium bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                    {profile.anonymous_name}
-                  </span>
-                </p>
-              ) : (
-                <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm">
-                  익명으로 소통하는 안전한 공간
-                </p>
-              )}
+              <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm">
+                익명으로 소통하는 안전한 공간
+              </p>
             </div>
             <div className="flex items-center gap-3">
               {user ? (

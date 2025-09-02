@@ -52,30 +52,8 @@ export type Database = {
           reply_count?: number
         }
       }
-      user_profiles: {
-        Row: {
-          id: string
-          anonymous_name: string
-          created_at: string
-        }
-        Insert: {
-          id: string
-          anonymous_name: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          anonymous_name?: string
-          created_at?: string
-        }
-      }
     }
   }
 }
 
-export type Thread = Database['public']['Tables']['threads']['Row'] & {
-  user_profiles?: {
-    nickname: string
-    anonymous_name: string
-  }
-}
+export type Thread = Database['public']['Tables']['threads']['Row']
