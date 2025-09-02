@@ -88,7 +88,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
           </svg>
         </div>
         <div>
-          <h3 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">
             새 스레드 시작
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-400">첫 줄에 요약을 쓰고 자유롭게 이야기해보세요</p>
@@ -131,7 +131,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
               onClick={() => setVisibilityType('anonymous')}
               className={`flex-1 px-4 py-3 rounded-xl border transition-all duration-200 ${
                 visibilityType === 'anonymous'
-                  ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white border-indigo-500 shadow-lg shadow-indigo-500/25'
+                  ? 'bg-indigo-600 text-white border-indigo-600'
                   : 'bg-white/50 dark:bg-gray-700/50 border-gray-200/50 dark:border-gray-600/50 text-gray-700 dark:text-gray-300 hover:bg-white/70 dark:hover:bg-gray-700/70'
               }`}
             >
@@ -146,7 +146,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
               onClick={() => setVisibilityType('nickname')}
               className={`flex-1 px-4 py-3 rounded-xl border transition-all duration-200 ${
                 visibilityType === 'nickname'
-                  ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white border-indigo-500 shadow-lg shadow-indigo-500/25'
+                  ? 'bg-indigo-600 text-white border-indigo-600'
                   : 'bg-white/50 dark:bg-gray-700/50 border-gray-200/50 dark:border-gray-600/50 text-gray-700 dark:text-gray-300 hover:bg-white/70 dark:hover:bg-gray-700/70'
               }`}
             >
@@ -164,7 +164,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
         <button
           type="submit"
           disabled={isSubmitting || !content.trim()}
-          className="flex-1 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-lg hover:shadow-indigo-500/25 hover:scale-[1.02] active:scale-[0.98]"
+          className="flex-1 px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
         >
           {isSubmitting ? (
             <div className="flex items-center justify-center gap-2">

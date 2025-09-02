@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 
 interface AuthModalProps {
@@ -18,6 +18,11 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
   const [error, setError] = useState('')
 
   const { signIn, signUp } = useAuth()
+
+  // initialMode가 변경되면 mode도 업데이트
+  useEffect(() => {
+    setMode(initialMode)
+  }, [initialMode])
 
   if (!isOpen) return null
 
@@ -70,7 +75,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
       <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl border border-white/30 dark:border-gray-700/30 p-8 w-full max-w-md shadow-xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
             {mode === 'login' ? '로그인' : '회원가입'}
           </h2>
           <button
@@ -138,7 +143,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
           <button
             type="submit"
             disabled={loading}
-            className="w-full px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-lg hover:shadow-indigo-500/25 hover:scale-[1.02] active:scale-[0.98]"
+            className="w-full px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-lg hover:shadow-indigo-500/25 hover:scale-[1.02] active:scale-[0.98]"
           >
             {loading ? (
               <div className="flex items-center justify-center gap-2">

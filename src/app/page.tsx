@@ -58,7 +58,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold text-slate-800 dark:text-slate-100">
                 익명 커뮤니티
               </h1>
               <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm">
@@ -95,7 +95,7 @@ export default function Home() {
                       setAuthModalMode('register')
                       setAuthModalOpen(true)
                     }}
-                    className="px-4 py-2 text-sm bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-medium hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 hover:shadow-lg hover:shadow-indigo-500/25"
+                    className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-all duration-200"
                   >
                     회원가입
                   </button>
@@ -129,7 +129,7 @@ export default function Home() {
                     setAuthModalMode('register')
                     setAuthModalOpen(true)
                   }}
-                  className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 hover:shadow-lg hover:shadow-indigo-500/25"
+                  className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-all duration-200"
                 >
                   회원가입
                 </button>
