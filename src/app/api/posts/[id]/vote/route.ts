@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase-server'
+import type { Database } from '@/lib/supabase'
 
 export async function PATCH(
   request: Request,
@@ -25,8 +26,9 @@ export async function PATCH(
       .single()
 
     if (fetchError) throw fetchError
+    if (!thread) throw new Error('Thread not found')
 
-    const updates = { likes: thread.likes + 1 }
+    const updates = { likes: (thread.likes as number) + 1 }
 
     const { data, error } = await supabase
       .from('threads')
