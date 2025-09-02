@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { getAnonymousId } from '@/lib/auth'
+import { useAuth } from '@/contexts/AuthContext'
 
 interface CreatePostProps {
   onPostCreated: () => void
@@ -12,23 +12,23 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
   const [content, setContent] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
+  
+  const { user } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!content.trim()) return
+    if (!content.trim() || !user) return
 
     setIsSubmitting(true)
 
     try {
-      const anonymousId = getAnonymousId()
-      
       const { error } = await supabase
         .from('threads')
         .insert([
           {
             content: content.trim(),
-            anonymous_id: anonymousId,
+            user_id: user.id,
             parent_id: null
           }
         ])
