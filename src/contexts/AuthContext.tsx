@@ -80,10 +80,44 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
     })
+    
+    // 회원가입 성공 시 프로필 자동 생성
+    if (data.user && !error) {
+      try {
+        // 고유 닉네임 생성
+        const randomSuffix = Math.random().toString(36).substring(2, 8)
+        const nickname = `user_${randomSuffix}`
+        
+        // 익명 이름 생성
+        const adjectives = ['행복한', '슬픈', '빠른', '느린', '큰', '작은', '붉은', '파란', '하얀', '검은']
+        const nouns = ['고양이', '강아지', '토끼', '새', '물고기', '곰', '여우', '늑대']
+        const randomAdj = adjectives[Math.floor(Math.random() * adjectives.length)]
+        const randomNoun = nouns[Math.floor(Math.random() * nouns.length)]
+        const anonymousName = `${randomAdj} ${randomNoun}`
+        
+        // 프로필 생성
+        const { error: profileError } = await supabase
+          .from('user_profiles')
+          .insert([
+            {
+              id: data.user.id,
+              nickname: nickname,
+              anonymous_name: anonymousName
+            }
+          ])
+          
+        if (profileError) {
+          console.error('Error creating user profile:', profileError)
+        }
+      } catch (profileError) {
+        console.error('Error in profile creation:', profileError)
+      }
+    }
+    
     return { error }
   }
 
