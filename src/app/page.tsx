@@ -13,7 +13,7 @@ export default function Home() {
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login')
 
-  const { user, profile, loading: authLoading, signOut } = useAuth()
+  const { user, profile, signOut } = useAuth()
 
   useEffect(() => {
     fetchThreads()

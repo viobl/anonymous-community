@@ -58,7 +58,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
         setPassword('')
         setConfirmPassword('')
       }
-    } catch (err) {
+    } catch {
       setError('오류가 발생했습니다. 다시 시도해주세요.')
     } finally {
       setLoading(false)
