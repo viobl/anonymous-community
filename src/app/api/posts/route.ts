@@ -5,7 +5,8 @@ export async function GET() {
   try {
     const supabase = await createClient()
 
-    const { data, error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase as any)
       .from('threads')
       .select('*')
       .is('parent_id', null)
@@ -36,7 +37,8 @@ export async function POST(request: Request) {
 
     const supabase = await createClient()
 
-    const { data, error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase as any)
       .from('threads')
       .insert([
         {

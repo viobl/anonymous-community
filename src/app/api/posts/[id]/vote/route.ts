@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase-server'
-import type { Database } from '@/lib/supabase'
 
 export async function PATCH(
   request: Request,
@@ -19,26 +18,33 @@ export async function PATCH(
 
     const supabase = await createClient()
 
-    const { data: thread, error: fetchError } = await supabase
+    // First get current likes count
+    const { data: threadData, error: fetchError } = await supabase
       .from('threads')
       .select('likes')
       .eq('id', id)
       .single()
 
-    if (fetchError) throw fetchError
-    if (!thread) throw new Error('Thread not found')
+    if (fetchError || !threadData) {
+      return NextResponse.json(
+        { error: 'Thread not found' },
+        { status: 404 }
+      )
+    }
 
-    const updates = { likes: (thread.likes as number) + 1 }
-
-    const { data, error } = await supabase
+    // Update with incremented likes
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase as any)
       .from('threads')
-      .update(updates)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .update({ likes: (threadData as any).likes + 1 })
       .eq('id', id)
       .select()
+      .single()
 
     if (error) throw error
 
-    return NextResponse.json(data[0])
+    return NextResponse.json(data)
   } catch (error) {
     console.error('Error voting on thread:', error)
     return NextResponse.json(
