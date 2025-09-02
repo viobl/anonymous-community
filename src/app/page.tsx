@@ -40,7 +40,7 @@ export default function Home() {
       if (threadsData && threadsData.length > 0) {
         const userIds = threadsData.map(thread => thread.user_id).filter(id => id !== null)
         
-        let profilesData = []
+        let profilesData: { id: string; anonymous_name: string }[] = []
         if (userIds.length > 0) {
           const { data } = await supabase
             .from('user_profiles')
