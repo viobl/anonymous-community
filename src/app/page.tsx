@@ -38,11 +38,16 @@ export default function Home() {
 
       // Fetch user profiles separately and merge
       if (threadsData && threadsData.length > 0) {
-        const userIds = threadsData.map(thread => thread.user_id)
-        const { data: profilesData } = await supabase
-          .from('user_profiles')
-          .select('id, anonymous_name')
-          .in('id', userIds)
+        const userIds = threadsData.map(thread => thread.user_id).filter(id => id !== null)
+        
+        let profilesData = []
+        if (userIds.length > 0) {
+          const { data } = await supabase
+            .from('user_profiles')
+            .select('id, anonymous_name')
+            .in('id', userIds)
+          profilesData = data || []
+        }
 
         // Merge the data
         const threadsWithProfiles = threadsData.map(thread => {
